@@ -52,8 +52,6 @@ E --> F[Evaluation - HR/ARHR]
 ```
 ---
 
-# 🧮 Methodology
-```md
 ## 🧮 Methodology
 
 We aim to recover the completed matrix **X** from the observed matrix **M**.
@@ -62,20 +60,19 @@ We aim to recover the completed matrix **X** from the observed matrix **M**.
 
 ### 🔹 Objective Function
 
-The optimization problem is defined as:
+The optimization problem is:
 
-\[
-\min_{X} \; \log \det (X^T X + I) + \frac{\mu}{2} \| P_{\Omega}(X - M) \|_F^2
-\]
+minimize:  
+log det (XᵀX + I) + (μ / 2) || PΩ(X − M) ||²_F
 
 Where:
 
-- \( X \) → Completed matrix  
-- \( M \) → Observed matrix  
-- \( \Omega \) → Set of observed indices  
-- \( P_{\Omega} \) → Projection onto observed entries  
-- \( \mu \) → Regularization parameter  
-- \( \| \cdot \|_F \) → Frobenius norm  
+- X → Completed matrix  
+- M → Observed matrix  
+- Ω → Set of observed indices  
+- PΩ → Projection onto observed entries  
+- μ → Regularization parameter  
+- ||·||_F → Frobenius norm  
 
 ---
 
@@ -89,50 +86,39 @@ We solve the problem using **ADMM (Alternating Direction Method of Multipliers)*
 
 **1. X Update (Low-rank approximation)**  
 - Perform Singular Value Decomposition (SVD):  
-\[
-X = U \Sigma V^T
-\]
-- Apply LogDet-based shrinkage on singular values  
+X = U Σ Vᵀ  
+- Apply LogDet-based shrinkage  
 
 ---
 
 **2. Y Update (Constraint enforcement)**  
-\[
-Y = \max(0, X + Z)
-\]
+Y = max(0, X + Z)
 
 ---
 
 **3. Z Update (Dual variable update)**  
-\[
-Z = Z + (X - Y)
-\]
+Z = Z + (X − Y)
 
 ---
 
 ### 🔹 Generating Top-N Recommendations
 
-Once the completed matrix \( X \) is obtained:
+Once the completed matrix X is obtained:
 
-1. For each user \( u \), consider the row \( X_u \)  
-2. Remove already observed items:
-\[
-X_u(i) = 0 \quad \forall i \in \Omega_u
-\]
-3. Sort remaining items in descending order of predicted scores  
-4. Select top \( N \) items:
-\[
-\text{Top-N}_u = \text{argsort}(X_u, \text{descending})[:N]
-\]
+1. For each user u, take row Xu  
+2. Remove already observed items:  
+   Xu(i) = 0 for all i ∈ Ωu  
+3. Sort remaining items in descending order  
+4. Select top N items  
+
+Top-Nᵤ = argsort(Xu, descending)[:N]
 
 ---
 
 ### 🔹 Final Output
 
-- Completed matrix \( X \)  
+- Completed matrix X  
 - Personalized Top-N recommendation list for each user  
-```
----
 
 ## 📊 Datasets
 
