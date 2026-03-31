@@ -19,7 +19,7 @@ Recommender systems are widely used in platforms like Netflix, Amazon, and Spoti
 - Handles highly sparse datasets  
 - Evaluated using HR@N and ARHR@N
 
-  ## 👥 Team C-8
+## 👥 Team C-8
 
 | Name | Roll No |
 |------|--------|
@@ -50,6 +50,8 @@ D --> E[Top-N Recommendation]
 E --> F[Evaluation HR/ARHR]
 
 ---
+```
+---
 
 # 🧮 OPTIMIZATION MODEL
 ```md
@@ -64,6 +66,8 @@ We recover matrix **X** from observed matrix **M** using:
 - X Update → SVD + shrinkage  
 - Y Update → constraint enforcement  
 - Z Update → dual update
+```
+---
 
 ## 📊 Datasets
 
@@ -106,7 +110,7 @@ Project contents: :contentReference[oaicite:0]{index=0}
 4. Execute ADMM model
 5. Evaluate results
 
-
+```
 ---
 
 # 📚 REFERENCES
@@ -117,6 +121,8 @@ Project contents: :contentReference[oaicite:0]{index=0}
 - Shi & Yu — Matrix Completion Limitations  
 - Kang et al. — LogDet Rank Minimization
 
+```
+---
 ## 🌟 Conclusion
 
 - LogDet improves rank approximation  
