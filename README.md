@@ -39,7 +39,7 @@ Recommender systems are widely used in platforms like Netflix, Amazon, and Spoti
 - Nuclear norm over-penalizes  
 - LogDet provides better approximation
 
-## ⚙️ Methodology
+## ⚙️System Architecture
 
 ```mermaid
 graph LR
@@ -47,24 +47,90 @@ A[Input Matrix] --> B[Mask]
 B --> C[ADMM Optimization]
 C --> D[Completed Matrix]
 D --> E[Top-N Recommendation]
-E --> F[Evaluation HR/ARHR]
+E --> F[Evaluation (HR@N,ARHR@N)]
 
 ```
 ---
 
-# 🧮 OPTIMIZATION MODEL
+# 🧮 Methodology
 ```md
-🧮 Optimization Model
+## 🧮 Methodology
 
-We recover matrix **X** from observed matrix **M** using:
+We aim to recover the completed matrix **X** from the observed matrix **M**.
 
-- LogDet as a rank approximation  
-- ADMM optimization  
+---
 
-### Steps:
-- X Update → SVD + shrinkage  
-- Y Update → constraint enforcement  
-- Z Update → dual update
+### 🔹 Objective Function
+
+The optimization problem is defined as:
+
+\[
+\min_{X} \; \log \det (X^T X + I) + \frac{\mu}{2} \| P_{\Omega}(X - M) \|_F^2
+\]
+
+Where:
+
+- \( X \) → Completed matrix  
+- \( M \) → Observed matrix  
+- \( \Omega \) → Set of observed indices  
+- \( P_{\Omega} \) → Projection onto observed entries  
+- \( \mu \) → Regularization parameter  
+- \( \| \cdot \|_F \) → Frobenius norm  
+
+---
+
+### 🔹 Optimization Technique
+
+We solve the problem using **ADMM (Alternating Direction Method of Multipliers)**.
+
+---
+
+### 🔹 Update Steps
+
+**1. X Update (Low-rank approximation)**  
+- Perform Singular Value Decomposition (SVD):  
+\[
+X = U \Sigma V^T
+\]
+- Apply LogDet-based shrinkage on singular values  
+
+---
+
+**2. Y Update (Constraint enforcement)**  
+\[
+Y = \max(0, X + Z)
+\]
+
+---
+
+**3. Z Update (Dual variable update)**  
+\[
+Z = Z + (X - Y)
+\]
+
+---
+
+### 🔹 Generating Top-N Recommendations
+
+Once the completed matrix \( X \) is obtained:
+
+1. For each user \( u \), consider the row \( X_u \)  
+2. Remove already observed items:
+\[
+X_u(i) = 0 \quad \forall i \in \Omega_u
+\]
+3. Sort remaining items in descending order of predicted scores  
+4. Select top \( N \) items:
+\[
+\text{Top-N}_u = \text{argsort}(X_u, \text{descending})[:N]
+\]
+
+---
+
+### 🔹 Final Output
+
+- Completed matrix \( X \)  
+- Personalized Top-N recommendation list for each user  
 ```
 ---
 
